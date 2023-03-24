@@ -232,4 +232,4 @@ This dataset doesn't seem to be in fourth normal form because it contains a tran
 
 5. Use [draw.io](https://draw.io) to draw an Entity-Relationship Diagram showing a 4NF-compliant form of this data, including primary key field(s), relationship(s), and cardinality.
 
-![Placeholder E-R Diagram](../images/er.svg)
+![E-R Diagram](../images/er.svg)
