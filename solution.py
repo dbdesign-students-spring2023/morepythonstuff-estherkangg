@@ -1,6 +1,4 @@
-# write your Python code here according to the instructions written in the instructions
 
-## import the csv module
 import csv
 
 def get_csv_data(filepath):
@@ -11,7 +9,12 @@ def get_csv_data(filepath):
     :param filepath: The file path of the CSV data file to open
     :returns: A list of dictionaries, where each dictionary represents one row from the file
     """
-    ## place your code here to complete this method according to the instructions above
+    
+    with open(filepath, newline="") as csvfile:
+        reader = csv.DictReader(csvfile)
+        data = [row for row in reader]
+    
+    return data
 
 def remove_rows_with_blank_neighborhood_fields(data):
     """
@@ -20,7 +23,8 @@ def remove_rows_with_blank_neighborhood_fields(data):
     :param data: The data, as a list of dictionaries
     :returns: The modified data, as a list of dictionaries
     """
-    ## place your code here to complete this method according to the instructions above
+
+    return [row for row in data if row['nta'] and row['nta_code']]
 
 def remove_out_of_range_entries(data, lat_range, lng_range):
     """
@@ -31,7 +35,8 @@ def remove_out_of_range_entries(data, lat_range, lng_range):
     :param long_range: tuple (Float, Float) representing the permissable range of longitude values
     :returns: The modified data, as a list of dictionaries
     """
-    ## place your code here to complete this method according to the instructions above
+
+    return [row for row in data if lat_range[0] <= float(row['latitude']) <= lat_range[1] and lng_range[0] <= float(row['longitude']) <= lng_range[1]]
 
 def make_type_free_default(data):
     """
@@ -40,7 +45,10 @@ def make_type_free_default(data):
     :param data: The data, as a list of dictionaries
     :returns: The modified data as a list of dictionaries
     """
-    ## place your code here to complete this method according to the instructions above
+    for row in data:
+        if not row['type']:
+            row['type'] = 'Free'
+    return data
 
 def remove_non_free_rows(data):
     """
@@ -49,7 +57,7 @@ def remove_non_free_rows(data):
     :param data: The data, as a list of dictionaries
     :returns: The modified data, as a list of dictionaries
     """
-    ## place your code here to complete this method according to the instructions above
+    return [row for row in data if row['type'] == 'Free']
 
 def make_location_title_case(data):
     """
@@ -58,7 +66,9 @@ def make_location_title_case(data):
     :param data: The data, as a list of dictionaries
     :returns: The modified data, as a list of dictionaries
     """
-    ## place your code here to complete this method according to the instructions above
+    for row in data:
+        row["location"] = row["location"].title()
+    return data
 
 def fix_provider(data, old_provider, new_provider):
     """
@@ -69,7 +79,10 @@ def fix_provider(data, old_provider, new_provider):
     :param new_provider: The new domain to replace the old_domain with, e.g. 'Spot On Networks'
     :returns: The modified data, as a list of dictionaries
     """
-    ## place your code here to complete this method according to the instructions above
+    for row in data:
+        if row["provider"] == old_provider:
+            row["provider"] = new_provider
+    return data
 
 def save_csv_data(data, filepath):
     """
@@ -78,7 +91,12 @@ def save_csv_data(data, filepath):
     :param data: The data, as a list of dictionaries
     :param filepath: The file path of the CSV data file to save to
     """
-    ## place your code here to complete this method according to the instructions above
+    with open(filepath, mode='w', newline='') as csv_file:
+        fieldnames = data[0].keys()
+        writer = csv.DictWriter(csv_file, fieldnames)
+        writer.writeheader()
+        for row in data:
+            writer.writerow(row)
 
 def get_number_free_hotspots(filepath, neighborhood):
     """
@@ -88,7 +106,10 @@ def get_number_free_hotspots(filepath, neighborhood):
     :param neighborhood: The neighborhood within which to count free wifi hotspots
     :returns: The number of free wifi hotspots within the indicated neighborhood
     """
-    ## place your code here to complete this method according to the instructions above
+    with open(filepath, mode= "r") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        num = sum(1 for row in csv_reader if row["nta"] == neighborhood and row['type'] == 'Free')
+    return num
 
 #################################################
 ## Do not modify the code below this line      ##
